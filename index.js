@@ -1,7 +1,9 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const app = express();
-const mysql = require('mysql');
+const express     = require('express');
+const bodyParser  = require('body-parser');
+const app         = express();
+const mysql       = require('mysql');
+var ethers        = require('ethers');  
+var crypto        = require('crypto');
  
 // parse application/json
 app.use(bodyParser.json());
@@ -19,7 +21,16 @@ conn.connect((err) =>{
   if(err) throw err;
   console.log('Mysql Connected...');
 });
- 
+
+//get ethers wallet
+app.get('/api/etherswallet',(req, res) => {
+  var id          = crypto.randomBytes(32).toString('hex');
+  var privateKey  = "0x"+id;
+  var wallet      = new ethers.Wallet(privateKey);
+  var walletAddress = wallet.address;
+  res.send(JSON.stringify({"status": 200, "error": null, "privatekey": privateKey, "address": walletAddress}));
+});
+
 //tampilkan semua data product
 app.get('/api/products',(req, res) => {
   let sql = "SELECT * FROM product";
