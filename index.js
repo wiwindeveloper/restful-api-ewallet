@@ -12,6 +12,11 @@ const tronWeb = new TronWeb({
     headers: { "TRON-PRO-API-KEY": '2329d118-c2dd-4875-ac0f-cdcb4770d368' }
 })
 
+const HttpProvider = TronWeb.providers.HttpProvider;
+const fullNode = new HttpProvider("https://api.trongrid.io");
+const solidityNode = new HttpProvider("https://api.trongrid.io");
+const eventServer = new HttpProvider("https://api.trongrid.io");
+
  
 // parse application/json
 app.use(bodyParser.json());
@@ -51,6 +56,31 @@ app.get('/api/tronwallet', (req, res) => {
     res.send(JSON.stringify({"status": 200, "error": null, "privatekey": privateKey, "publicKey": publicKey, "addressBase58" : addressBase58, "addressHex" : addressHex}));
   });
 })
+
+//get tron usdt balance
+app.get('/api/tronwallet/:id/:private',(req, res) => {
+  const privateKey  = req.params.private;
+  const tronPrivate = new TronWeb(fullNode, solidityNode, eventServer, privateKey);
+  const CONTRACT    = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t";
+  const ACCOUNT     = req.params.id;
+
+  async function main() {
+    const {
+        abi
+    } = await tronPrivate.trx.getContract(CONTRACT);
+
+    const contract = tronPrivate.contract(abi.entrys, CONTRACT);
+
+    const balance = await contract.methods.balanceOf(ACCOUNT).call();
+    
+    const results = balance.toString();
+
+    res.send(JSON.stringify({"status": 200, "error": null, "response": results}));
+  }
+
+  main();
+});
+
 
 //tampilkan semua data product
 // app.get('/api/products',(req, res) => {
