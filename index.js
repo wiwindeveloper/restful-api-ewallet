@@ -81,6 +81,39 @@ app.get('/api/tronwallet/:id/:private',(req, res) => {
   main();
 });
 
+app.get('/api/trc20transfer/:private/:to/:value',(req, res) => {
+  const privateKey  = req.params.private;
+  const tronWeb     = new TronWeb(fullNode,solidityNode,eventServer,privateKey);
+
+  async function triggerSmartContract() {
+    const trc20ContractAddress = "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"; //contract address
+
+    var toaddress              = req.params.to;
+    var value                  = req.params.value;
+
+    try {
+        let contract = await tronWeb.contract().at(trc20ContractAddress);
+        //Use send to execute a non-pure or modify smart contract method on a given smart contract that modify or change values on the blockchain.
+        // These methods consume resources(bandwidth and energy) to perform as the changes need to be broadcasted out to the network.
+        let result = await contract.transfer(
+            toaddress, //address _to
+            value   //amount
+        ).send({
+            feeLimit: 1000000
+        }).then(output => {
+          // console.log('- Output:', output, '\n');
+          res.send(JSON.stringify({"status": 200, "response": output}));
+        });
+        
+        // console.log('result: ', result);
+    } catch(error) {
+        // console.error("trigger smart contract error",error)
+      res.send(JSON.stringify({"status": 300, "error": "trigger smart contract error", "response": error}));
+    }
+  }
+  
+  triggerSmartContract();
+});
 
 //tampilkan semua data product
 // app.get('/api/products',(req, res) => {
