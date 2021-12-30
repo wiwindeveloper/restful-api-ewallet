@@ -101,7 +101,7 @@ app.get('/api/trc20transfer/:private/:to/:value',(req, res) => {
         ).send({
             feeLimit: 1000000
         }).then(output => {
-          // console.log('- Output:', output, '\n');
+          console.log('- Output:', output, '\n');
           res.send(JSON.stringify({"status": 200, "response": output}));
         });
         
