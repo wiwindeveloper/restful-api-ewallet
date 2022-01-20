@@ -115,6 +115,110 @@ app.get('/api/trc20transfer/:private/:to/:value',(req, res) => {
   triggerSmartContract();
 });
 
+app.get('/api/samplejson',(req, res) => {
+    let data = {
+      "datatable": 
+        {
+          "data": [
+            [
+              "MTM", 
+              "2022-01-19",
+              "10.09",
+              "10.40",
+              "10.03",
+              "10.05",
+              "109541",
+              "0.0",
+              "1.0",
+              "10.09",
+              "10.40",
+              "10.03",
+              "10.05",
+              "109541"
+            ],
+            [
+              "MTM",
+              "2022-01-20",
+              "10.00",
+              "15.70",
+              "10.00",
+              "15.70",
+              "581993",
+              "0.0",
+              "1.0",
+              "10.00",
+              "15.70",
+              "10.00",
+              "15.70"
+            ]
+          ],
+        "columns": [
+          {
+              "name": "ticker",
+              "type": "String"
+          },
+          {
+              "name": "date",
+              "type": "Date"
+          },
+          {
+              "name": "open",
+              "type": "BigDecimal(34,12)"
+          },
+          {
+              "name": "high",
+              "type": "BigDecimal(34,12)"
+          },
+          {
+              "name": "low",
+              "type": "BigDecimal(34,12)"
+          },
+          {
+              "name": "close",
+              "type": "BigDecimal(34,12)"
+          },
+          {
+              "name": "volume",
+              "type": "BigDecimal(37,15)"
+          },
+          {
+              "name": "ex-dividend",
+              "type": "BigDecimal(42,20)"
+          },
+          {
+              "name": "split_ratio",
+              "type": "double"
+          },
+          {
+              "name": "adj_open",
+              "type": "BigDecimal(50,28)"
+          },
+          {
+              "name": "adj_high",
+              "type": "BigDecimal(50,28)"
+          },
+          {
+              "name": "adj_low",
+              "type": "BigDecimal(50,28)"
+          },
+          {
+              "name": "adj_close",
+              "type": "BigDecimal(50,28)"
+          },
+          {
+              "name": "adj_volume",
+              "type": "double"
+          }
+      ]
+      },
+      "meta": {
+          "next_cursor_id": null
+      }
+  };
+
+    res.send(JSON.stringify(data));
+});
+
 //tampilkan semua data product
 // app.get('/api/products',(req, res) => {
 //   let sql = "SELECT * FROM product";
